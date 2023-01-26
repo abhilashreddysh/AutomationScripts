@@ -1,6 +1,6 @@
 # _One File Projects_ 
 
-_One File Projetcs is a collection of single-file scripts and projects to help in daily tasks._
+_One File Projects is a collection of single-file scripts and projects to help in daily tasks._
 
 ## Table of Contents
 
