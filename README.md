@@ -1,6 +1,6 @@
-# _Small Programs_ 
+# _One File Projects_ 
 
-_Small Programs is a collection of single-file scripts and projects._
+_One File Projetcs is a collection of single-file scripts and projects to help in daily tasks._
 
 ## Table of Contents
 
