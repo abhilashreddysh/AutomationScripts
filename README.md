@@ -23,7 +23,7 @@ If no input is given the script by default sets the time to 6:00 PM (18:00)
 The script will now run until the time entered is greater than the system time.
 
 ***
-### [Linux Status Mail](https://github.com/abhilashreddysh/AutomationScripts/blob/main/linuxStatusMail.sh)
+### [Linux Status Mail](https://github.com/abhilashreddysh/AutomationScripts/blob/main/linuxStatusMail.py)
 
 Script to get linux services update through mail.
 Can be automated and scheduled to run in time intervals using crontab.
