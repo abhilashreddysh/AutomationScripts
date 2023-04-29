@@ -22,6 +22,8 @@ If no input is given the script by default sets the time to 6:00 PM (18:00)
 
 The script will now run until the time entered is greater than the system time.
 
+Note: Later versions are moved to seperate repository as it contains more files to manage.
+
 ***
 ### [Linux Status Mail](https://github.com/abhilashreddysh/AutomationScripts/blob/main/linuxStatusMail.py)
 
