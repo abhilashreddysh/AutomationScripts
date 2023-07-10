@@ -91,4 +91,4 @@ ${TOTALSBC}GB\t${USEDSBC}GB\t\t${FREESBC}GB\t$(($FREESWAP * 100 / $TOTALSWAP  ))
 # FILENAME="health-`hostname`-`date +%y%m%d`-`date +%H%M`.txt"
 FILENAME="health-`hostname`-`date +%y%m%d`.txt"
 sysstat > $FILENAME
-echo -e "Reported file $FILENAME generated in current directory." $RESULT
+/usr/local/cust/tbotsend.sh "Report file $FILENAME generated." "$FILENAME"

@@ -12,8 +12,8 @@
     $currentdir = getcwd();
     $env = strtolower(basename(dirname(__FILE__)));
     $port=443;
-    if ($env == "test"){
-      $port=8081;
+    if ($env == "webconsole"){
+      $port=80;
     }
     ?>
     <div class="container">
@@ -77,7 +77,7 @@
               <tr>
                 <td>Firewall-ufw</td>
                 <td class="status"><?php
-                  echo shell_exec("$currentdir/bashScripts/servicestatus.sh ufw");
+                  echo shell_exec("sudo ufw status | head -n 1 | awk -F ' ' '{print $2}'");
                   ?></td>
                 <td>-</td>
               </tr>
@@ -88,8 +88,8 @@
           <p class="card-header">Quick Actions</p><br>
           <div class="btn-cont">
             <!-- This link will add ?test=true to your URL, myfilename.php?test=true -->
-            <a class="btn" href="?readonly=true">Read Only</a>
-            <a class="btn" href="?edit=true">edit Access</a>
+            <!-- <a class="btn" href="?readonly=true">Read Only</a> -->
+            <!-- <a class="btn" href="?edit=true">edit Access</a> -->
             <!-- <a class="btn" href="?nginx=true">Nginx restart</a> -->
             <a class="btn" href="http://10.1.1.11:9091/transmission/web/">Transmission</a>
           </div>
@@ -97,14 +97,14 @@
         <div class="cards">
           <p class="card-header">Disk Info</p><br>
           <?php
-          $output = shell_exec('df -Ph');
+          $output = shell_exec("$currentdir/bashScripts/diskinfo.sh");
           echo "<pre>$output</pre>";
           ?>
         </div>
         <div class="cards">
           <p class="card-header">Disk Info</p><br>
           <?php
-          $output = shell_exec('df -h');
+          $output = shell_exec('df -Ph');
           echo "<pre>$output</pre>";
           ?>
         </div>
