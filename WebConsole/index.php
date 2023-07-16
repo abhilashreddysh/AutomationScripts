@@ -91,7 +91,8 @@
             <!-- <a class="btn" href="?readonly=true">Read Only</a> -->
             <!-- <a class="btn" href="?edit=true">edit Access</a> -->
             <!-- <a class="btn" href="?nginx=true">Nginx restart</a> -->
-            <a class="btn" href="http://10.1.1.11:9091/transmission/web/">Transmission</a>
+            <a class="btn" href="http://192.168.1.11:9091/transmission/web/">Transmission</a>
+            <a class="btn" href="http://192.168.1.11:443">Zabbix</a>
           </div>
         </div>
         <div class="cards">

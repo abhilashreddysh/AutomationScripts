@@ -10,8 +10,7 @@ echo -e "
 Hostname         : `hostname`
 Kernel Version   : `uname -r`
 CPU              : `grep "model name" /proc/cpuinfo | cut -d ' ' -f3- | awk {'print $0'} | head -1`
-Uptime           : `uptime | sed 's/.*up \([^,]*\), .*/\1/'`
-Last Reboot Time : `who -b | awk '{print $3,$4}'`
+Uptime           : `uptime -p`
  
 *********************************************************************
                              Process
@@ -91,4 +90,4 @@ ${TOTALSBC}GB\t${USEDSBC}GB\t\t${FREESBC}GB\t$(($FREESWAP * 100 / $TOTALSWAP  ))
 # FILENAME="health-`hostname`-`date +%y%m%d`-`date +%H%M`.txt"
 FILENAME="health-`hostname`-`date +%y%m%d`.txt"
 sysstat > $FILENAME
-/usr/local/cust/tbotsend.sh "Report file $FILENAME generated." "$FILENAME"
+/usr/local/cust/discord.sh --text "Report file $FILENAME." --file "$FILENAME"
