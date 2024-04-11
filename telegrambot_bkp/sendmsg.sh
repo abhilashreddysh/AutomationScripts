@@ -3,7 +3,7 @@
 
 #Include telegram chat id and bot token ID here
 chat_id="1246409037"
-token="5864339399:AAHthA5UaUv2qjuesQ4suHp6pe1pmm85GX8"
+token="5921161871:AAHAGfPNlEUDwM5SIeYzWUHbe1tBkVH-sM4"
 
 #Temporary files to store data
 resource_usage_info=/tmp/resource_usage_info.txt
