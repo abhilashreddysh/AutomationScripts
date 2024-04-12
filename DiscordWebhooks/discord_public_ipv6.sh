@@ -4,11 +4,11 @@
 source /usr/local/bin/CONF_DISCORD
 WEBHOOK_URL=$WEBHOOKPROD
 
-ipv6_deprecated=$(ip -6 addr|grep deprecated |awk '{print $2}'|grep -P '^(?!fe80)[[:alnum:]]{4}:.*/64'|cut -d '/' -f1|wc -l)
-ipv6=$(ip -6 addr|awk '{print $2}'|grep -P '^(?!fe80)[[:alnum:]]{4}:.*/64'|cut -d '/' -f1)
-recorded_ipv6=$(cat /tmp/publicipv6) || "File_Missing"
+ipv6_deprecated=( $(ip -6 addr|grep deprecated |awk '{print $2}'|grep -P '^(?!fe80)[[:alnum:]]{4}:.*/64'|cut -d '/' -f1) )
+ipv6=$(ip -6 addr|grep -v deprecated | awk '{print $2}'|grep -P '^(?!fe80)[[:alnum:]]{4}:.*/64'|cut -d '/' -f1)
+recorded_ipv6=$(cat /tmp/publicipv6) || echo "File_Missing"
 
-if [ "$ipv6_deprecated" -eq 1 ]; then
+if [ ${#ipv6_deprecated[@]} -ge 1 ]; then
 {
 # Construct payload for upcoming ipv6 change
 payload=$(cat <<EOF
@@ -24,7 +24,7 @@ payload=$(cat <<EOF
             },
             {
                 "name":"Old IPv6",
-                "value":"$ipv6_deprecated"
+                "value":"$(printf '%s\n' "${ipv6_deprecated[*]}")"
             }
         ],
         "color":"$SUCCESS",
@@ -61,5 +61,5 @@ payload=$(cat <<EOF
 EOF
 )
 curl -H "Content-Type: application/json" -X POST -d "$payload" "$WEBHOOK_URL"
-ip -6 addr|awk '{print $2}'|grep -P '^(?!fe80)[[:alnum:]]{4}:.*/64'|cut -d '/' -f1 > /tmp/publicipv6
+echo $ipv6 > /tmp/publicipv6
 fi
