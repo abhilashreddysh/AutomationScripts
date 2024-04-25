@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- <meta name="viewport" content="width=1024"> -->
     <link rel="stylesheet" href="/styles/style.css">
-    <title>[hound] <?php echo strtoupper(basename(dirname(__FILE__))); ?></title>
+    <!-- <link rel="stylesheet" href="/styles/pico.css"> -->
+    <title>[zebian] <?php echo strtoupper(basename(dirname(__FILE__))); ?></title>
   </head>
   <body>
     <?php
@@ -17,7 +18,7 @@
     }
     ?>
     <div class="container">
-      <h1><a href="http://10.1.1.11:<?php echo $port?>/index.php">Hound <?php echo basename(dirname(__FILE__)); ?> Environment</a></h1>
+      <h1><a href="http://192.168.9.201:<?php echo $port?>/index.php">Zebian <?php echo basename(dirname(__FILE__)); ?> Environment</a></h1>
       <!-- <h3><a href="https://stackexchange.com/users/28886743"><img src="https://stackexchange.com/users/flair/28886743.png" width="208" height="58" alt="profile for Abhilash Reddy on Stack Exchange, a network of free, community-driven Q&amp;A sites" title="profile for Abhilash Reddy on Stack Exchange, a network of free, community-driven Q&amp;A sites"></a></h3> -->
       <div class="main-card">
         <div class="cards">
@@ -91,8 +92,8 @@
             <!-- <a class="btn" href="?readonly=true">Read Only</a> -->
             <!-- <a class="btn" href="?edit=true">edit Access</a> -->
             <!-- <a class="btn" href="?nginx=true">Nginx restart</a> -->
-            <a class="btn" href="http://192.168.1.11:9091/transmission/web/">Transmission</a>
-            <a class="btn" href="http://192.168.1.11:443">Zabbix</a>
+            <a class="btn" href="http://192.168.9.201:9091/transmission/web/">Transmission</a>
+            <a class="btn" href="http://192.168.9.201:443/admin">Pi-Hole</a>
           </div>
         </div>
         <div class="cards">
