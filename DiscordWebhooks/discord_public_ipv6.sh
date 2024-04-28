@@ -2,7 +2,7 @@
 
 # Load conf
 source /usr/local/bin/CONF_DISCORD
-WEBHOOK_URL=$WEBHOOKPROD
+WEBHOOK_URL=$WEBHOOKIPCHGALERT
 
 ipv6_deprecated=( $(ip -6 addr|grep deprecated |awk '{print $2}'|grep -P '^(?!fe80)[[:alnum:]]{4}:.*/64'|cut -d '/' -f1) )
 ipv6=$(ip -6 addr|grep -v deprecated | awk '{print $2}'|grep -P '^(?!fe80)[[:alnum:]]{4}:.*/64'|cut -d '/' -f1)

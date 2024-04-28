@@ -2,7 +2,7 @@
 
 # Load conf
 source /usr/local/bin/CONF_DISCORD
-WEBHOOK_URL=$WEBHOOKDEV
+WEBHOOK_URL=$WEBHOOKTRANSMISSION
 
 # Construct payload
 payload=$(cat <<EOF

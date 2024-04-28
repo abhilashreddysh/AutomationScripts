@@ -3,6 +3,12 @@
 WEBHOOKPROD="<PROD_WEBHOOK_URL>"
 WEBHOOKDEV="<DEV_WEBHOOK_URL>"
 
+# Webhook URL for IP Change alerts
+WEBHOOKIPCHGALERT=$WEBHOOKPROD
+
+# Webhook URL for transmission alerts
+WEBHOOKTRANSMISSION=$WEBHOOKPROD
+
 # Alert Decimal Color Codes for embeds
 INFO=65535
 SUCCESS=65280
