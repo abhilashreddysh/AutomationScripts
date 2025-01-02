@@ -1,0 +1,20 @@
+# Webhook URL's
+# Add more for different use cases
+WEBHOOKPROD="<PROD_WEBHOOK_URL>"
+WEBHOOKDEV="<DEV_WEBHOOK_URL>"
+
+# Webhook URL for IP Change alerts
+WEBHOOKIPCHGALERT=$WEBHOOKPROD
+
+# Webhook URL for transmission alerts
+WEBHOOKTRANSMISSION=$WEBHOOKPROD
+
+# Alert Decimal Color Codes for embeds
+INFO=65535
+SUCCESS=65280
+WARN=16765952
+ERROR=16720161
+
+
+
+## Rsync - sudo rsync -avhP /AutomationScripts/DiscordWebhooks/discord_* /usr/local/bin/scripts/

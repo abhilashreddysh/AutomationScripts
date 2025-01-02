@@ -1,0 +1,151 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #2b2d42;
+  color: #edf2f4;
+  font-family: "Consolas", monospace, sans-serif;
+  flex: 1;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+*::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  margin: 0.11rem;
+}
+a {
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+/* Tables Design */
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  /* overflow: hidden; */
+  /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); */
+}
+th,
+td {
+  padding: 0.7rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  text-transform: uppercase;
+}
+th {
+  text-align: left;
+  font-weight: bolder;
+}
+thead th {
+  background-color: #414464;
+}
+tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+tbody td {
+  position: relative;
+}
+
+/* Button design */
+
+.btn {
+  padding: 0.5rem;
+  margin: 0.2rem;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  transition: all 0.5s;
+  position: relative;
+  text-align: center;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s;
+}
+.btn:hover::before {
+  opacity: 0;
+  transform: scale(0.5, 0.5);
+}
+.btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: all 0.3s;
+  border: 1px solid #ef233c;
+  transform: scale(1.2, 1.2);
+}
+.btn:hover::after {
+  opacity: 1;
+  transform: scale(1, 1);
+}
+
+.t-btn {
+  background: none;
+  font-size: 0.85em;
+  color: #ef233c;
+  transition: all 0.3s;
+}
+.t-btn:active,
+.t-btn:hover {
+  scale: (1.2);
+  color: #8d99ae;
+}
+
+.btn-cont {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.main-card {
+  width: 80%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+  overflow: scroll;
+}
+.cards {
+  width: 80%;
+  margin: 0.5rem;
+  padding: 1rem;
+  overflow: scroll;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+.card-header {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.4em;
+}
+#status-active {
+  color: #84dcc6;
+}
+#status-inactive {
+  color: #ef233c;
+}
+
+@media only screen and (max-width: 600px) {
+  .main-card,
+  .cards {
+    width: 95%;
+  }
+}
