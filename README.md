@@ -11,4 +11,4 @@ _This repository is a collection of scripts to help in daily tasks._
 5. [**Discord Webhooks**](https://github.com/abhilashreddysh/AutomationScripts/blob/main/DiscordWebhooks) - Discord Webhook templates for linux server monitoring
 6. [**Site Monitor**](https://github.com/abhilashreddysh/AutomationScripts/blob/main/Python/site_monitor.pyw) - Overlay window for monitoring urls
 
-### _[Detailed info on the above scripts can be found in my wiki.](https://abhilashreddysh.github.io/wiki/)_
+### _[Detailed info on the above scripts can be found in my wiki.](https://abhilashreddysh.github.io/wiki/projects)_
