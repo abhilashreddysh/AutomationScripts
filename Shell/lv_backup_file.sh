@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# homelabvg_backup_files_paranoid.sh
-# Paranoid-safe file-level LVM backup: mounts each LV read-only, rsyncs files over SSH, resumable, verified with SHA256
+# homelabvg_backup_files_paranoid_v2.sh
+# File-level LVM backup, paranoid-safe, resumable, verified with SHA256
 set -euo pipefail
 
 # -------------------------
-# CONFIG - edit these
+# CONFIG
 # -------------------------
 REMOTE_USER="abhil"
 REMOTE_HOST="192.168.1.10"
@@ -27,7 +27,7 @@ echo "CONFIG: REMOTE=${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}  VG=${VG_NAME}"
 echo
 
 # -------------------------
-# Local command checks
+# Local commands check
 # -------------------------
 for cmd in lvs lsblk mount umount rsync sha256sum ssh awk numfmt df stat find mkdir; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
@@ -46,19 +46,16 @@ if ! ping -c1 -W2 "$REMOTE_HOST" >/dev/null 2>&1; then
 fi
 
 echo "[2/10] Checking remote tools & write access..."
-REMOTE_CHECK="
-  command -v rsync >/dev/null 2>&1 || { echo 'RSYNC_MISSING'; exit 10; }
-  command -v sha256sum >/dev/null 2>&1 || { echo 'SHA_MISSING'; exit 11; }
-  command -v find >/dev/null 2>&1 || { echo 'FIND_MISSING'; exit 12; }
-  mkdir -p '${REMOTE_DIR}' >/dev/null 2>&1 || { echo 'MKDIR_FAIL'; exit 13; }
-  test -w '${REMOTE_DIR}' || { echo 'NO_WRITE'; exit 14; }
-  # check free space
-  if df -B1 --output=avail '${REMOTE_DIR}' >/dev/null 2>&1; then
-    df -B1 --output=avail '${REMOTE_DIR}' | tail -n1
-  else
-    df -Pk '${REMOTE_DIR}' | tail -n1 | awk '{print \$4 * 1024}'
-  fi
-"
+REMOTE_CHECK="\
+command -v rsync >/dev/null 2>&1 || { echo 'RSYNC_MISSING'; exit 10; } \
+command -v sha256sum >/dev/null 2>&1 || { echo 'SHA_MISSING'; exit 11; } \
+mkdir -p '${REMOTE_DIR}' >/dev/null 2>&1 || { echo 'MKDIR_FAIL'; exit 12; } \
+test -w '${REMOTE_DIR}' || { echo 'NO_WRITE'; exit 13; } \
+if df -B1 --output=avail '${REMOTE_DIR}' >/dev/null 2>&1; then \
+  df -B1 --output=avail '${REMOTE_DIR}' | tail -n1; \
+else \
+  df -Pk '${REMOTE_DIR}' | tail -n1 | awk '{print \$4 * 1024}'; \
+fi"
 REMOTE_DF_OUT=$(ssh $SSH_OPTS "${REMOTE_USER}@${REMOTE_HOST}" "$REMOTE_CHECK" 2>&1 || true)
 REMOTE_FREE_BYTES=$(printf "%s\n" "$REMOTE_DF_OUT" | tail -n1 | tr -cd '0-9')
 if [[ -z "$REMOTE_FREE_BYTES" ]]; then
@@ -80,28 +77,6 @@ fi
 echo "Found LVs: ${LV_NAMES[*]}"
 
 # -------------------------
-# Calculate total LV size for remote space check
-# -------------------------
-TOTAL_BYTES_REQ=0
-declare -A LV_SIZES_BYTES
-for lv in "${LV_NAMES[@]}"; do
-  DEV="/dev/${VG_NAME}/${lv}"
-  if [[ ! -b "$DEV" ]]; then
-    LV_SIZES_BYTES["$lv"]=0
-    continue
-  fi
-  SIZE=$(lsblk -bno SIZE "$DEV" | awk '{print $1}')
-  LV_SIZES_BYTES["$lv"]=$SIZE
-  TOTAL_BYTES_REQ=$((TOTAL_BYTES_REQ + SIZE))
-done
-
-echo "[4/10] Total estimated LV size: $TOTAL_BYTES_REQ ($(numfmt --to=iec --suffix=B $TOTAL_BYTES_REQ))"
-if (( REMOTE_FREE_BYTES < TOTAL_BYTES_REQ )); then
-  echo "[FATAL] Remote does not have enough free space."
-  exit 7
-fi
-
-# -------------------------
 # Summary header
 # -------------------------
 printf "%-12s %-12s %-64s %-64s %-6s\n" "LV" "Files" "Local_SHA256" "Remote_SHA256" "MATCH" > "$SUMMARY_TMP"
@@ -109,7 +84,7 @@ printf "%-12s %-12s %-64s %-64s %-6s\n" "LV" "Files" "Local_SHA256" "Remote_SHA2
 # -------------------------
 # Backup per LV
 # -------------------------
-echo "[5/10] Starting per-LV file-level backup..."
+echo "[4/10] Starting per-LV file-level backup..."
 for lv in "${LV_NAMES[@]}"; do
   SRC_DEV="/dev/${VG_NAME}/${lv}"
   if [[ ! -b "$SRC_DEV" ]]; then
@@ -117,7 +92,7 @@ for lv in "${LV_NAMES[@]}"; do
     continue
   fi
 
-  # mount read-only
+  # Mount read-only
   MOUNT_POINT="/mnt/${lv}_backup"
   mkdir -p "$MOUNT_POINT"
   mount -o ro "$SRC_DEV" "$MOUNT_POINT"
@@ -127,16 +102,11 @@ for lv in "${LV_NAMES[@]}"; do
   echo "----"
   echo "[LV] $lv    src: $SRC_DEV  dest: ${REMOTE_USER}@${REMOTE_HOST}:$DEST_DIR"
 
-  # rsync with resume & progress
+  # Rsync with resume & progress, only update changed files
   RSYNC_OPTS="-avh --progress --append-verify --inplace --no-perms --no-owner --no-group -S"
-  if ! rsync $RSYNC_OPTS "$MOUNT_POINT/" "${REMOTE_USER}@${REMOTE_HOST}:$DEST_DIR/"; then
-    echo "[ERROR] Rsync failed for LV $lv"
-    umount "$MOUNT_POINT"
-    printf "%-12s %-12s %-64s %-64s %-6s\n" "$lv" "ERROR" "-" "-" "RSYNC_FAIL" >> "$SUMMARY_TMP"
-    continue
-  fi
+  rsync $RSYNC_OPTS "$MOUNT_POINT/" "${REMOTE_USER}@${REMOTE_HOST}:$DEST_DIR/"
 
-  # compute local & remote SHA256 recursively
+  # Compute local & remote SHA256 recursively (only once per run)
   echo "[HASH] Computing local SHA256..."
   LOCAL_HASH=$(find "$MOUNT_POINT" -type f -exec sha256sum {} + | sha256sum | awk '{print $1}')
 
