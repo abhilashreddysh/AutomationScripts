@@ -103,7 +103,7 @@ for lv in "${LV_NAMES[@]}"; do
   echo "[LV] $lv    src: $SRC_DEV  dest: ${REMOTE_USER}@${REMOTE_HOST}:$DEST_DIR"
 
   # Rsync with resume & progress, only update changed files
-  RSYNC_OPTS="-avh --progress --append-verify --inplace --no-perms --no-owner --no-group -S"
+  RSYNC_OPTS="-avh --progress --append-verify --inplace --no-perms --no-owner --no-group --checksum -S"
   rsync $RSYNC_OPTS "$MOUNT_POINT/" "${REMOTE_USER}@${REMOTE_HOST}:$DEST_DIR/"
 
   # Compute local & remote SHA256 recursively (only once per run)
